@@ -1,0 +1,13 @@
+package com.example.cloudstorage.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class sendResponse {
+    private String status;
+    private String message;
+}
