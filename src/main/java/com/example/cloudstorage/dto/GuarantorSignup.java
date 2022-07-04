@@ -8,6 +8,7 @@ public class GuarantorSignup {
     private String mobileNumber;
     private String emailId;
     private String gender;
+    private String relationship;
     private String password;
     private String conformPassword;
 }

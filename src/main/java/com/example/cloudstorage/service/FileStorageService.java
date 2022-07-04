@@ -1,10 +1,12 @@
 package com.example.cloudstorage.service;
 
+import com.example.cloudstorage.Mapper.GuarantorMapper;
 import com.example.cloudstorage.response.sendResponse;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,9 @@ import java.util.Objects;
 @Slf4j
 public class FileStorageService {
 
+    @Autowired
+    GuarantorMapper mapper;
+
     private Environment environment;
 
     private StorageOptions storageOptions;
@@ -31,9 +36,9 @@ public class FileStorageService {
     public final String DOCUMENT_URL = "https://console.firebase.google.com/project/document-storage-b1776/storage/document-storage-b1776.appspot.com/files";
 
     private String uploadFile(File file, String fileName) throws IOException {
-        BlobId blobId = BlobId.of("document-storage-b1776.appspot.com", fileName);
+        BlobId blobId = BlobId.of("dummy", fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
-        Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("./serviceAccountKey.json"));
+        Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("./dummyAccountKey.json"));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
         return String.format(DOCUMENT_URL, URLEncoder.encode(fileName, String.valueOf(StandardCharsets.UTF_8)));
@@ -52,7 +57,7 @@ public class FileStorageService {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-    public Object upload(MultipartFile multipartFile) {
+    public Object upload(MultipartFile multipartFile,String type) {
 
         try {
             String fileName = multipartFile.getOriginalFilename();
@@ -60,6 +65,7 @@ public class FileStorageService {
             File file = this.convertToFile(multipartFile, fileName);
             String TEMP_URL = this.uploadFile(file, fileName);
             file.delete();
+            mapper.uploadDocuments(fileName,type,1);
             return new sendResponse("Successfully Uploaded !", TEMP_URL);
         } catch (Exception e) {
             e.printStackTrace();

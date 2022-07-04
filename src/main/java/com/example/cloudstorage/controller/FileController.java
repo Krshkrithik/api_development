@@ -16,13 +16,20 @@ public class FileController {
     @Autowired
     FileStorageService fileService;
 
-    @PostMapping("/profile/pic")
-    public Object upload(@RequestParam("file") MultipartFile multipartFile) {
+    @PostMapping("/upload/document")
+    public Object upload(@RequestParam("file") MultipartFile multipartFile,
+                         @RequestParam("type") String fileType) {
         log.info("HIT -/upload | File Name : {}", multipartFile.getOriginalFilename());
-        return fileService.upload(multipartFile);
+        return fileService.upload(multipartFile,fileType);
     }
 
-    @PostMapping("/profile/pic/{fileName}")
+    @PutMapping("/update/documents")
+    public ResponseEntity<?> updateDocuments(@RequestParam("id") int guarantor_id
+            ,@RequestParam("file") MultipartFile file,@RequestParam("type") String fileType){
+        return ResponseEntity.ok("Success");
+    }
+
+    @PostMapping("/download/document/{fileName}")
     public Object download(@PathVariable String fileName) throws IOException {
         log.info("HIT -/download | File Name : {}", fileName);
         return fileService.download(fileName);
