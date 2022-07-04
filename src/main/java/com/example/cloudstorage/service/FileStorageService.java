@@ -79,9 +79,9 @@ public class FileStorageService {
         String destFilePath = "Z:\\New folder\\" + destFileName;                                    // to set destination file path
 
         ////////////////////////////////   Download  ////////////////////////////////////////////////////////////////////////
-        Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("./serviceAccountKey.json"));
+        Credentials credentials = GoogleCredentials.fromStream(new FileInputStream("./dummyAccountKey.json"));
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
-        Blob blob = storage.get(BlobId.of("document-storage-b1776.appspot.com", fileName));
+        Blob blob = storage.get(BlobId.of("dummy", fileName));
         blob.downloadTo(Paths.get(destFilePath));
         return new sendResponse("200", "Successfully Downloaded!");
     }
