@@ -33,7 +33,7 @@ public class FileStorageService {
 
     private StorageOptions storageOptions;
 
-    public final String DOCUMENT_URL = "https://console.firebase.google.com/project/document-storage-b1776/storage/document-storage-b1776.appspot.com/files";
+    public final String DOCUMENT_URL = "https://console.firebase.google.com/project/dummy/storage/dummy/files";
 
     private String uploadFile(File file, String fileName) throws IOException {
         BlobId blobId = BlobId.of("dummy", fileName);
